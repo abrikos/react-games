@@ -1,0 +1,7 @@
+{
+  "levels":[
+    {"cols":9, "rows":9, "bombs":10},
+    {"cols":16, "rows":32, "bombs":48},
+    {"cols":48, "rows":64, "bombs":248}
+  ]
+}
