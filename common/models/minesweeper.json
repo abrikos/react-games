@@ -1,0 +1,32 @@
+{
+  "name": "minesweeper",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "stop": {
+      "type": "date"
+    },
+    "level": {
+      "type": "object",
+      "required": true,
+      "default": {
+        "cols": 9,
+        "rows": 9,
+        "bombs": 10
+      }
+    },
+    "field": {
+      "type": ["object"]
+    }
+  },
+  "mixins": {
+    "TimeStamp" : true
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

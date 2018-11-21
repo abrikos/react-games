@@ -1,0 +1,20 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "memory": {
+    "name": "memory",
+    "connector": "kv-memory"
+  },
+  "postgres": {
+    "host": "localhost",
+    "port": 0,
+    "url": "",
+    "database": "games",
+    "password": "password",
+    "name": "postgres",
+    "user": "postgres",
+    "connector": "postgresql"
+  }
+}

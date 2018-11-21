@@ -46,7 +46,7 @@ class App extends Component {
 					<Context.Provider value={{rootPath}}>
 						<div className='container'>
 							<Navbar color="light" light expand="md">
-								<NavbarBrand href="/">reactstrap</NavbarBrand>
+								<NavbarBrand href="/">reactstrap99</NavbarBrand>
 								<NavbarToggler onClick={this.toggle} />
 								<Collapse isOpen={this.state.isOpen} navbar>
 									<Nav className="ml-auto" navbar>

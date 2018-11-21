@@ -4,6 +4,7 @@ import { action, observable } from 'mobx';
 import Cell from './Cell';
 import Config from './config'
 
+
 @inject('store') @observer
 class Minesweeper extends React.Component {
 	@observable level = 0;
@@ -17,6 +18,7 @@ class Minesweeper extends React.Component {
 		this.level = 0;
 		if (this.props.location.pathname === '/admin/profile') this.props.history.push('/admin/profile/info');
 		this.chooseLevel(0)
+
 	}
 
 

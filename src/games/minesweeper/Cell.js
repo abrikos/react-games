@@ -15,7 +15,8 @@ class Cell extends React.Component {
 	}
 
 	@action clickhandler = () => {
-		console.log(this.props)
+		console.log(this.props.coordinate.col, this.props.coordinate.row);
+		fetch('http://localhost:4000/api/minesweepers/1',{ method: 'GET'}).then(console.log)
 	};
 
 
