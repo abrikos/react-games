@@ -4,7 +4,8 @@ import { action, observable } from 'mobx';
 
 @inject('store') @observer
 class Cell extends React.Component {
-	@observable value = 0;
+	@observable text = '';
+	@observable class = '';
 
 	constructor (props) {
 		super(props);
@@ -12,18 +13,28 @@ class Cell extends React.Component {
 		this.store = this.props.store;
 		this.value = 0;
 		this.coordinate = this.props.coordinate;
+		this.text = `${this.coordinate.col}x${this.coordinate.row}`
 	}
 
-	@action clickhandler = () => {
+	@action clickhandler = async () => {
 		console.log(this.props.coordinate.col, this.props.coordinate.row);
-		fetch('http://localhost:4000/api/minesweepers/1',{ method: 'GET'}).then(console.log)
+		let rawResponse = await fetch('http://localhost:4000/api/minesweepers/1',{ method: 'GET'});
+        const content = await rawResponse.json();
+        console.log(content)
 	};
 
 
+	click = (coordinate)=>{
+		//this.props.onClick(coordinate)
+        this.text = '.';
+        this.class = 'open';
+		console.log(coordinate)
+	};
+
 	render () {
 		return (
-			<td className="cell" onClick={this.clickhandler}>
-				{this.coordinate.row}x{this.coordinate.col}
+			<td className={this.class} onClick={()=>this.click(this.coordinate)}>
+				{this.text}
 			</td>
 		);
 	}

@@ -4,6 +4,7 @@ import { action, observable } from 'mobx';
 import Cell from './Cell';
 import Config from './config'
 
+import './minesweeper.css'
 
 @inject('store') @observer
 class Minesweeper extends React.Component {
@@ -17,11 +18,19 @@ class Minesweeper extends React.Component {
 		this.levels = Config.levels;
 		this.level = 0;
 		if (this.props.location.pathname === '/admin/profile') this.props.history.push('/admin/profile/info');
-		this.chooseLevel(0)
-
+		this.chooseLevel(0);
+		this.init();
 	}
 
+    componentDidMount(){
+        this.setState({
+            field:{a:10}
+        })
+	}
 
+	@action init = async ()=>{
+
+	};
 
 	@action chooseLevel = val => {
 		this.level = val;
@@ -36,6 +45,10 @@ class Minesweeper extends React.Component {
 		}
 	};
 
+
+	@action click = (cell)=>{
+		console.log(cell.col, cell.row)
+	};
 
 	render () {
 		return (
@@ -52,7 +65,7 @@ class Minesweeper extends React.Component {
 						<tbody>{this.field.map((row,i)=>{
 							return <tr key={`row${i}`}>
 								{row.map((col,j)=>{
-									return <Cell coordinate={col} key={`kol${j}`}/>
+									return <Cell coordinate={col} key={`kol${j}`} onClick={this.click}/>
 								})}
 							</tr>
 						})}

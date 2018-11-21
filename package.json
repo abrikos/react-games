@@ -67,7 +67,7 @@
     "start": "PORT=3002 node scripts/start.js",
     "server": "node server/server.js",
     "build": "node scripts/build.js",
-    "update": "node $NODE_DEBUG_OPTION  server/boot/auto-migration.js",
+    "update": "node $NODE_DEBUG_OPTION  scripts/auto-migration.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {

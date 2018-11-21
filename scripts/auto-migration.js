@@ -10,7 +10,7 @@ try {
 }
 
 
-let app = require(path.resolve(__dirname, '../server'));
+let app = require(path.resolve(__dirname, '../server/server'));
 let pgSource = app.datasources.postgres;
 
 let updateConstraints = (models, callback) => {
