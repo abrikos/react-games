@@ -3,6 +3,7 @@ import Config from './config';
 class Cell{
     mines = -1;
     text = '';
+    flag =false;
     constructor(props){
         this.i = props.i;
         this.col = props.col;
@@ -10,6 +11,7 @@ class Cell{
     }
 
     getClass=()=>{
+        if(this.flag) return 'flag';
         switch(this.mines){
             case -1: return 'initial';
             case -2: return 'bomb';
@@ -43,6 +45,7 @@ class Field {
     click(cell){
         let c = this.getCell(cell);
         this.setMines(cell);
+        if(c.flag) return;
         if(this.isMine(cell))
             this.gameOver(cell);
         else {
@@ -52,9 +55,7 @@ class Field {
     }
 
     crowler(cell){
-        console.log('CROWLER',cell.mines);
         if(cell.mines!==0) return;
-        console.log('CROWLER',cell.mines);
         for(let i =0; i <9; i++){
             let row = Math.floor(i / 3);
             let col = i % 3;
@@ -113,6 +114,10 @@ class Field {
         return this.cells.find(c=>this.compare(c,cell))
     }
 
+    setFlag(coordinate){
+        let cell = this.getCell(coordinate);
+        cell.flag = !cell.flag;
+    }
 
 }
 

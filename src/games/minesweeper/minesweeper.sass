@@ -10,15 +10,21 @@ table.board
     height: $cell-width
     background-repeat: no-repeat
     background-position: center
+    background-size: 100%
   td.bombs-count-0
     background-color: whitesmoke
   td.bomb
-    background-color: red
+
+    background-image: url("/images/minesweeper/bomb.svg")
   td.cheater
     background-color: yellow
   td.this-mine
-    background-color: brown
 
+    background-color: red
+    background-image: url("/images/minesweeper/bomb.svg")
+  td.flag
+
+    background-image: url("/images/minesweeper/flag.svg")
 
   @for $i from 1 through 8
     td.bombs-count-#{$i}

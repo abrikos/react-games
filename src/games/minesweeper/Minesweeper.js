@@ -14,9 +14,9 @@ class Minesweeper extends React.Component {
 	@observable field = [];
 	@observable time = null;
 
-
 	constructor (props) {
 		super(props);
+        this.cellRef = React.createRef();
 		this.props = props;
 		this.store = this.props.store;
 		this.levels = Config.levels;
@@ -35,8 +35,16 @@ class Minesweeper extends React.Component {
 
 	}
     componentDidMount(){
-
+        document.addEventListener('contextmenu', this._handleContextMenu);
 	}
+
+    _handleContextMenu = (event) => {
+        event.preventDefault();
+        let coordinate = {row:event.path[0].getAttribute('row')*1, col:event.path[0].getAttribute('col')*1};
+        this.field.setFlag(coordinate);
+        let obj = event.path[0];
+        obj.classList.toggle('flag');
+    };
 
 	@action chooseLevel = val => {
 		this.level = val;
@@ -44,7 +52,7 @@ class Minesweeper extends React.Component {
         //this.props.history.push(`/ms/${this.level}`)
 	};
 
-	colId(cell){
+	cellId(cell){
         return`col-${cell.col}-${cell.row}`;
 	}
 
@@ -58,9 +66,11 @@ class Minesweeper extends React.Component {
 
 	drawCell(cell){
 		return <Cell
-            key={this.colId(cell)+'-'+this.time}
+            key={this.cellId(cell)+'-'+this.time}
             onClick={()=>this.click(cell)}
             className={cell.getClass()}
+			row={cell.row}
+			col={cell.col}
             //coordinate={cell}
 			//children={this.field.getCell(cell).content}
 			children={cell.text}
@@ -91,7 +101,6 @@ class Minesweeper extends React.Component {
 					<button onClick={()=>this.chooseLevel(0)} className='btn btn-info'>1</button>
 					<button onClick={()=>this.chooseLevel(1)}>2</button>
 					<button onClick={()=>this.chooseLevel(2)}>3</button>
-					<button onClick={()=>this.chooseLevel(3)}>4</button>
 				</div>
 				<div>
 
