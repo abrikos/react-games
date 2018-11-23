@@ -5,6 +5,7 @@ import Cell from './Cell';
 import Config from './config'
 import Field from './Field';
 
+
 import './minesweeper.css'
 @inject('store') @observer
 
@@ -12,6 +13,7 @@ import './minesweeper.css'
 class Minesweeper extends React.Component {
 	@observable level = 0;
 	@observable field = [];
+	@observable mines = [];
 	@observable time = null;
 
 	constructor (props) {
@@ -22,9 +24,7 @@ class Minesweeper extends React.Component {
 		this.levels = Config.levels;
 		this.level = 0;
 		this.init();
-        this.state = {
-            field: this.field
-        }
+
 		//if (this.props.location.pathname === '/admin/profile') this.props.history.push('/admin/profile/info');
 
 	}
@@ -32,7 +32,6 @@ class Minesweeper extends React.Component {
 	init(){
         this.time = new Date().valueOf();
         this.field = new Field(this.level);
-
 	}
     componentDidMount(){
         document.addEventListener('contextmenu', this._handleContextMenu);
@@ -57,10 +56,8 @@ class Minesweeper extends React.Component {
 	}
 
 
-	click(obj){
-		let cell = Object.assign({},obj);
+	click(cell){
         this.field.click(cell);
-        //this.field.gameOver();
         this.setState({field:this.field})
 	};
 

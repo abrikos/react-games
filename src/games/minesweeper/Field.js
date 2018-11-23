@@ -27,7 +27,7 @@ class Cell{
 }
 
 class Field {
-    mines = [];
+    #mines = [];
     cheater = true;
     constructor(level){
         this.level = Config.levels[level];
@@ -68,7 +68,7 @@ class Field {
     }
 
     isMine(cell){
-        return this.mines.find(c1=>this.compare(c1,cell))
+        return this.#mines.find(c1=>this.compare(c1,cell))
     }
 
     countMines(cell) {
@@ -76,7 +76,7 @@ class Field {
         for(let i =  - 1; i < 2; i++){
             for(let j = - 1; j < 2; j++){
                 let c2 = {col: cell.col +i, row: cell.row + j};
-                let bomb = this.mines.find(c1=>this.compare(c1,c2));
+                let bomb = this.#mines.find(c1=>this.compare(c1,c2));
                 if(bomb){
                     bombsFound = bombsFound+1;
                 }
@@ -86,17 +86,17 @@ class Field {
     }
 
     setMines(cell){
-        if(this.mines.length) return;
+        if(this.#mines.length) return;
         let mines = this.cells.filter(c=>!this.compare(c,cell));
         mines.sort( function() { return 0.5 - Math.random() } );
-        this.mines =  mines.slice(0,this.level.bombs);
+        this.#mines =  mines.slice(0,this.level.bombs);
         if(this.cheater){
-            this.mines.map(c=>{c.mines=-3;return c;})
+            this.#mines.map(c=>{c.mines=-3;return c;})
         }
     }
 
     gameOver(cell){
-        this.mines.map(c=>{
+        this.#mines.map(c=>{
             if(this.compare(c,cell))
                 c.mines = -4;
             else
