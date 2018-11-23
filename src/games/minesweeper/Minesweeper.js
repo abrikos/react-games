@@ -56,8 +56,32 @@ class Minesweeper extends React.Component {
         this.setState({field:this.field})
 	};
 
-	drawBombs(){
+	drawCell(cell){
+		return <Cell
+            key={this.colId(cell)+'-'+this.time}
+            onClick={()=>this.click(cell)}
+            className={cell.getClass()}
+            //coordinate={cell}
+			//children={this.field.getCell(cell).content}
+			children={cell.text}
+        />
+	}
 
+	drawRows(){
+        let rows = [];
+        let cols = [];
+        let r = 0;
+		for(let cell of this.field.cells){
+            let row = Math.floor(cell.i / this.field.level.cols);
+            if(row!==r){
+				r=row;
+				rows.push(<tr key={row} children={cols}/>);
+				cols = []
+			}
+            cols.push(this.drawCell(cell));
+		}
+        rows.push(<tr key={r+1} children={cols}/>);
+		return rows;
 	}
 
     render () {
@@ -72,21 +96,7 @@ class Minesweeper extends React.Component {
 				<div>
 
 					<table className="board"><tbody>
-					{this.field.rows.map(row=><tr key={row}>
-						{this.field.cols.map(col=>{
-							let cell = {col,row};
-                            let id = this.colId(cell);
-							return <Cell
-									key={id+'-'+this.time}
-									onClick={()=>this.click(cell)}
-									className={this.field.getClass(cell)}
-									coordinate={cell}
-									children={this.field.getCell(cell).mines}
-							/>
-
-
-						})}
-					</tr>)}
+						{this.drawRows()}
 					</tbody></table>
 				</div>
 

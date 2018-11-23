@@ -12,8 +12,6 @@ class Cell extends React.Component {
 		this.props = props;
 		this.store = this.props.store;
 		this.value = 0;
-		this.coordinate = this.props.coordinate;
-		this.text = `${this.coordinate.col}x${this.coordinate.row}`
 	}
 
 	@action clickhandler = async () => {

@@ -1,16 +1,42 @@
 import Config from './config';
 
+class Cell{
+    mines = -1;
+    text = '';
+    constructor(props){
+        this.i = props.i;
+        this.col = props.col;
+        this.row = props.row;
+    }
+
+    getClass=()=>{
+        switch(this.mines){
+            case -1: return 'initial';
+            case -2: return 'bomb';
+            case -3: return 'cheater';
+            case -4: return 'this-mine';
+            default: return 'bombs-count-' + this.mines;
+        }
+    };
+
+    getCoordinate (){
+        return `${this.row}-${this.col}`;
+    }
+}
+
 class Field {
     mines = [];
+    cheater = true;
     constructor(level){
         this.level = Config.levels[level];
         let field = Array.from(Array(this.level.rows*this.level.cols).keys());
-        this.rows = Array.from(Array(this.level.rows).keys());
+        this.rows = new Array(this.level.rows);
         this.cols = Array.from(Array(this.level.cols).keys());
+
         this.cells = field.map(i=>{
             let row = Math.floor(i / this.level.cols);
             let col = i % this.level.cols;
-            return {i,row,col,isMine:false,status:'closed',mines:-1}
+            return new Cell({i,row,col});
         });
     }
 
@@ -18,21 +44,24 @@ class Field {
         let c = this.getCell(cell);
         this.setMines(cell);
         if(this.isMine(cell))
-            c.status = 'bomb';
+            this.gameOver(cell);
         else {
             c.mines = this.countMines(cell);
-            c.status = 'bombs-count-' + c.mines
-            if(c.mines===0) this.crowler(cell)
         }
+        this.crowler(c)
     }
 
     crowler(cell){
+        console.log('CROWLER',cell.mines);
+        if(cell.mines!==0) return;
+        console.log('CROWLER',cell.mines);
         for(let i =0; i <9; i++){
             let row = Math.floor(i / 3);
             let col = i % 3;
-            let test = this.getCell({row:cell.row - 1 +row, col:cell.col - 1 + col})
-            if(test){
-                let bombs = this.countMines(test);
+            let test = this.getCell({row:cell.row - 1 +row, col:cell.col - 1 + col});
+            if(test && !this.compare(cell,test) && test.getClass()==='initial'){
+                test.mines = this.countMines(test);
+                this.crowler(test);
             }
         }
     }
@@ -60,12 +89,19 @@ class Field {
         let mines = this.cells.filter(c=>!this.compare(c,cell));
         mines.sort( function() { return 0.5 - Math.random() } );
         this.mines =  mines.slice(0,this.level.bombs);
+        if(this.cheater){
+            this.mines.map(c=>{c.mines=-3;return c;})
+        }
     }
 
-    gameOver(){
-        for(let cell of this.mines){
-            this.cells[this.getCell(cell).i].status='bomb'
-        }
+    gameOver(cell){
+        this.mines.map(c=>{
+            if(this.compare(c,cell))
+                c.mines = -4;
+            else
+                c.mines = -2;
+            return c;
+        })
     }
 
 
@@ -77,13 +113,7 @@ class Field {
         return this.cells.find(c=>this.compare(c,cell))
     }
 
-    getClass(cell){
-        switch(this.cells.find(c=>this.compare(c,cell)).mines){
-            case -1: return 'close';
-            case 0: return 'open';
-        }
-    }
 
-};
+}
 
 export default Field;
