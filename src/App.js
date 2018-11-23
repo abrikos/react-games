@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Provider } from 'mobx-react';
-import { Router, Route } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import Context from './context';
 import { createBrowserHistory as createHistory } from 'history';
-import * as Games from './games'
-import Home from './home';
+import Routes from './Routes';
 import {
 	Collapse,
 	Navbar,
@@ -39,7 +38,7 @@ class App extends Component {
 	}
 
 	render() {
-		let { rootPath } = this.props;
+		let { rootPath, ...props } = this.props;
 		return (
 			<Provider store={this.store}>
 				<Router history={this.history}>
@@ -77,8 +76,7 @@ class App extends Component {
 								</Collapse>
 							</Navbar>
 
-						<Route exact path='/' component={Home}/>
-						<Route exact path='/ms' component={Games.Minesweeper}/>
+						<Routes store={this.store} {...props}/>
 						</div>
 					</Context.Provider>
 

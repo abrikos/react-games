@@ -1,8 +1,20 @@
-td
-  background-color: silver
-  padding: 5px
-  cursor: pointer
-  border: 3px outset #CCC
+$cell-width: 30px
+table.board
+  td
+    background-color: silver
+    padding: 5px
+    cursor: pointer
+    border: 3px outset #CCC
+    width: $cell-width
+    height: $cell-width
+    background-repeat: no-repeat
+    background-position: center
+  td.bombs-count-0
+    background-color: whitesmoke
+  td.bomb
+    background-color: red
 
-td.open
-  background-color: whitesmoke
+  @for $i from 1 through 8
+    td.bombs-count-#{$i}
+      background-size: $cell-width / 2
+      background-image: url("/images/minesweeper/#{$i}.svg")

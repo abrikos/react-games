@@ -3,13 +3,17 @@ import { inject, observer } from 'mobx-react';
 import { action, observable } from 'mobx';
 import Cell from './Cell';
 import Config from './config'
+import Field from './Field';
 
 import './minesweeper.css'
-
 @inject('store') @observer
+
+
 class Minesweeper extends React.Component {
 	@observable level = 0;
 	@observable field = [];
+	@observable time = null;
+
 
 	constructor (props) {
 		super(props);
@@ -17,61 +21,73 @@ class Minesweeper extends React.Component {
 		this.store = this.props.store;
 		this.levels = Config.levels;
 		this.level = 0;
-		if (this.props.location.pathname === '/admin/profile') this.props.history.push('/admin/profile/info');
-		this.chooseLevel(0);
 		this.init();
+        this.state = {
+            field: this.field
+        }
+		//if (this.props.location.pathname === '/admin/profile') this.props.history.push('/admin/profile/info');
+
 	}
 
+	init(){
+        this.time = new Date().valueOf();
+        this.field = new Field(this.level);
+
+	}
     componentDidMount(){
-        this.setState({
-            field:{a:10}
-        })
+
 	}
-
-	@action init = async ()=>{
-
-	};
 
 	@action chooseLevel = val => {
 		this.level = val;
-		this.field = [];
-		let level = this.levels[this.level];
-		for(let row =0; row < level.rows; row++){
-			let tr = [];
-			for(let col =0; col < level.cols; col++) {
-				tr.push({row,col})
-			}
-			this.field.push(tr);
-		}
+		this.init();
+        //this.props.history.push(`/ms/${this.level}`)
 	};
 
+	colId(cell){
+        return`col-${cell.col}-${cell.row}`;
+	}
 
-	@action click = (cell)=>{
-		console.log(cell.col, cell.row)
+
+	click(obj){
+		let cell = Object.assign({},obj);
+        this.field.click(cell);
+        //this.field.gameOver();
+        this.setState({field:this.field})
 	};
 
-	render () {
+	drawBombs(){
+
+	}
+
+    render () {
 		return (
 			<div className="admin-profile">
 				<div>
 					<button onClick={()=>this.chooseLevel(0)} className='btn btn-info'>1</button>
 					<button onClick={()=>this.chooseLevel(1)}>2</button>
 					<button onClick={()=>this.chooseLevel(2)}>3</button>
+					<button onClick={()=>this.chooseLevel(3)}>4</button>
 				</div>
-
 				<div>
-					<table className="board">
 
-						<tbody>{this.field.map((row,i)=>{
-							return <tr key={`row${i}`}>
-								{row.map((col,j)=>{
-									return <Cell coordinate={col} key={`kol${j}`} onClick={this.click}/>
-								})}
-							</tr>
+					<table className="board"><tbody>
+					{this.field.rows.map(row=><tr key={row}>
+						{this.field.cols.map(col=>{
+							let cell = {col,row};
+                            let id = this.colId(cell);
+							return <Cell
+									key={id+'-'+this.time}
+									onClick={()=>this.click(cell)}
+									className={this.field.getClass(cell)}
+									coordinate={cell}
+									children={this.field.getCell(cell).mines}
+							/>
+
+
 						})}
-
-						</tbody>
-					</table>
+					</tr>)}
+					</tbody></table>
 				</div>
 
 			</div>

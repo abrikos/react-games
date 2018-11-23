@@ -24,18 +24,10 @@ class Cell extends React.Component {
 	};
 
 
-	click = (coordinate)=>{
-		//this.props.onClick(coordinate)
-        this.text = '.';
-        this.class = 'open';
-		console.log(coordinate)
-	};
-
 	render () {
+	    let props = this.props;
 		return (
-			<td className={this.class} onClick={()=>this.click(this.coordinate)}>
-				{this.text}
-			</td>
+            <td {...props}/>
 		);
 	}
 }
