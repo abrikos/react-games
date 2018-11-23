@@ -17,6 +17,7 @@ class Cell{
             case -2: return 'bomb';
             case -3: return 'cheater';
             case -4: return 'this-mine';
+            case -5: return 'bomb-false';
             default: return 'bombs-count-' + this.mines;
         }
     };
@@ -29,6 +30,7 @@ class Cell{
 class Field {
     #mines = [];
     cheater = true;
+    finished = false;
     constructor(level){
         this.level = Config.levels[level];
         let field = Array.from(Array(this.level.rows*this.level.cols).keys());
@@ -43,6 +45,7 @@ class Field {
     }
 
     click(cell){
+        if(this.finished) return;
         let c = this.getCell(cell);
         this.setMines(cell);
         if(c.flag) return;
@@ -97,10 +100,16 @@ class Field {
 
     gameOver(cell){
         this.#mines.map(c=>{
+
             if(this.compare(c,cell))
                 c.mines = -4;
             else
                 c.mines = -2;
+            return c;
+        });
+        this.finished = true;
+        this.cells.map(c=>{
+            if(c.flag){c.flag=false; c.mines=-5;}
             return c;
         })
     }

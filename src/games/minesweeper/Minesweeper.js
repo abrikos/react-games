@@ -4,9 +4,10 @@ import { action, observable } from 'mobx';
 import Cell from './Cell';
 import Config from './config'
 import Field from './Field';
-
+import { Button, ButtonGroup } from 'reactstrap';
 
 import './minesweeper.css'
+
 @inject('store') @observer
 
 
@@ -39,6 +40,7 @@ class Minesweeper extends React.Component {
 
     _handleContextMenu = (event) => {
         event.preventDefault();
+        if(this.field.finished) return;
         let coordinate = {row:event.path[0].getAttribute('row')*1, col:event.path[0].getAttribute('col')*1};
         this.field.setFlag(coordinate);
         let obj = event.path[0];
@@ -94,10 +96,12 @@ class Minesweeper extends React.Component {
     render () {
 		return (
 			<div className="admin-profile">
-				<div>
-					<button onClick={()=>this.chooseLevel(0)} className='btn btn-info'>1</button>
-					<button onClick={()=>this.chooseLevel(1)}>2</button>
-					<button onClick={()=>this.chooseLevel(2)}>3</button>
+				<div>Level:
+                    <ButtonGroup>
+						<Button onClick={()=>this.chooseLevel(0)} color='primary'>1</Button>
+						<Button onClick={()=>this.chooseLevel(1)} color='secondary'>2</Button>
+						<Button onClick={()=>this.chooseLevel(2)} color='warning'>3</Button>
+					</ButtonGroup>
 				</div>
 				<div>
 
