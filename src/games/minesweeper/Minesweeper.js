@@ -40,7 +40,7 @@ class Minesweeper extends React.Component {
 
     _handleContextMenu = (event) => {
         event.preventDefault();
-        if(this.field.finished) return;
+        if(this.field.isFinished()) return;
         let coordinate = {row:event.path[0].getAttribute('row')*1, col:event.path[0].getAttribute('col')*1};
         this.field.setFlag(coordinate);
         let obj = event.path[0];
@@ -109,6 +109,7 @@ class Minesweeper extends React.Component {
 						{this.drawRows()}
 					</tbody></table>
 				</div>
+				<div>{this.field.status}</div>
 
 			</div>
 		);

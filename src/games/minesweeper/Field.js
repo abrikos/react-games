@@ -30,7 +30,7 @@ class Cell{
 class Field {
     #mines = [];
     cheater = true;
-    finished = false;
+    status = 'play';
     constructor(level){
         this.level = Config.levels[level];
         let field = Array.from(Array(this.level.rows*this.level.cols).keys());
@@ -45,7 +45,7 @@ class Field {
     }
 
     click(cell){
-        if(this.finished) return;
+        if(this.isFinished()) return;
         let c = this.getCell(cell);
         this.setMines(cell);
         if(c.flag) return;
@@ -54,7 +54,19 @@ class Field {
         else {
             c.mines = this.countMines(cell);
         }
+        this.isWin();
         this.crowler(c)
+    }
+
+    isFinished(){
+        return this.status!=='play'
+    }
+
+    isWin(){
+        let initial = this.cells.filter(c=>c.getClass()==='initial');
+        if(initial.length - (this.level.mines - (this.cheater?this.level.mines:0) )===0){
+            this.status='win';
+        }
     }
 
     crowler(cell){
@@ -92,7 +104,7 @@ class Field {
         if(this.#mines.length) return;
         let mines = this.cells.filter(c=>!this.compare(c,cell));
         mines.sort( function() { return 0.5 - Math.random() } );
-        this.#mines =  mines.slice(0,this.level.bombs);
+        this.#mines =  mines.slice(0,this.level.mines);
         if(this.cheater){
             this.#mines.map(c=>{c.mines=-3;return c;})
         }
@@ -107,7 +119,7 @@ class Field {
                 c.mines = -2;
             return c;
         });
-        this.finished = true;
+        this.status = 'gameover';
         this.cells.map(c=>{
             if(c.flag){c.flag=false; c.mines=-5;}
             return c;
