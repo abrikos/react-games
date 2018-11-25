@@ -30,7 +30,7 @@ class Cell{
 class Field {
     #mines = [];
     cheater = true;
-    status = 'play';
+    status = 'standby';
     constructor(level){
         this.level = Config.levels[level];
         let field = Array.from(Array(this.level.rows*this.level.cols).keys());
@@ -44,6 +44,10 @@ class Field {
         });
     }
 
+    minesLeft(){
+        return this.level.mines - this.cells.filter(c=>c.flag).length
+    }
+
     click(cell){
         if(this.isFinished()) return;
         let c = this.getCell(cell);
@@ -54,20 +58,25 @@ class Field {
         else {
             c.mines = this.countMines(cell);
         }
+        this.crowler(c);
         this.isWin();
-        this.crowler(c)
     }
 
     isFinished(){
-        return this.status!=='play'
+        return ['play','standby'].indexOf(this.status)===-1
     }
 
     isWin(){
         let initial = this.cells.filter(c=>c.getClass()==='initial');
         if(initial.length - (this.level.mines - (this.cheater?this.level.mines:0) )===0){
             this.status='win';
+            this.#mines.map(c=>{
+                c.flag=true;
+                return c;
+            })
         }
     }
+
 
     crowler(cell){
         if(cell.mines!==0) return;
@@ -108,6 +117,7 @@ class Field {
         if(this.cheater){
             this.#mines.map(c=>{c.mines=-3;return c;})
         }
+        this.status = 'play';
     }
 
     gameOver(cell){

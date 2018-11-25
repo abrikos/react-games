@@ -1,14 +1,13 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, observable } from 'mobx';
-import Cell from './Cell';
 import Config from './config'
 import Field from './Field';
 import { Button, ButtonGroup } from 'reactstrap';
-
 import './minesweeper.css'
 
 @inject('store') @observer
+
 
 
 class Minesweeper extends React.Component {
@@ -16,6 +15,7 @@ class Minesweeper extends React.Component {
 	@observable field = [];
 	@observable mines = [];
 	@observable time = null;
+	@observable minesLeft = null;
 
 	constructor (props) {
 		super(props);
@@ -25,18 +25,42 @@ class Minesweeper extends React.Component {
 		this.levels = Config.levels;
 		this.level = 0;
 		this.init();
-
+		this.state ={
+            currentCount:0
+		}
+		//Model().find({where:{level:9}})
 		//if (this.props.location.pathname === '/admin/profile') this.props.history.push('/admin/profile/info');
 
 	}
 
 	init(){
-        this.time = new Date().valueOf();
+        this.time = 0;
+        this.start = 0;
         this.field = new Field(this.level);
+        this.minesLeft = this.field.minesLeft();
+        //setInterval(()=>{this.timer()},1000)
 	}
+
+	@action timer(){
+		if(this.field.status === 'standby'){
+            this.start = new Date().valueOf();
+        }
+		if(this.field.status === 'play'){
+            this.setState({ currentCount: this.state.currentCount + 1 });
+            //this.time = new Date().valueOf();
+		}
+	}
+
     componentDidMount(){
+        let intervalId = setInterval(()=>this.timer(), 1000);
+        this.setState({intervalId: intervalId});
         document.addEventListener('contextmenu', this._handleContextMenu);
 	}
+
+    componentWillUnmount() {
+        // use intervalId from the state to clear the interval
+        clearInterval(this.state.intervalId);
+    }
 
     _handleContextMenu = (event) => {
         event.preventDefault();
@@ -45,6 +69,7 @@ class Minesweeper extends React.Component {
         this.field.setFlag(coordinate);
         let obj = event.path[0];
         obj.classList.toggle('flag');
+        this.minesLeft = this.field.minesLeft();
     };
 
 	@action chooseLevel = val => {
@@ -60,18 +85,20 @@ class Minesweeper extends React.Component {
 
 	click(cell){
         this.field.click(cell);
+        if(this.field.status==='win'){
+            let time = (new Date().valueOf() - this.start)/1000;
+			console.log(time)
+		}
         this.setState({field:this.field})
 	};
 
 	drawCell(cell){
-		return <Cell
+		return <td
             key={this.cellId(cell)+'-'+this.time}
             onClick={()=>this.click(cell)}
             className={cell.getClass()}
 			row={cell.row}
 			col={cell.col}
-            //coordinate={cell}
-			//children={this.field.getCell(cell).content}
 			children={cell.text}
         />
 	}
@@ -104,12 +131,18 @@ class Minesweeper extends React.Component {
 					</ButtonGroup>
 				</div>
 				<div>
+					<table border="1"><tbody>
+                    <tr>
+                        <td width="50%">{this.state.currentCount}</td>
+                        <td width="50%" className={'text-right'}>{this.minesLeft}</td>
+                    </tr>
+					<tr><td colSpan={2}>
+						<table className="board"><tbody>{this.drawRows()}</tbody></table>
+					</td></tr>
+                    </tbody>
+					</table>
 
-					<table className="board"><tbody>
-						{this.drawRows()}
-					</tbody></table>
 				</div>
-				<div>{this.field.status}</div>
 
 			</div>
 		);
