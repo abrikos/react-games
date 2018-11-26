@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Provider } from 'mobx-react';
-import { Router } from 'react-router-dom';
+import { Router, Link } from 'react-router-dom';
 import Context from './context';
 import { createBrowserHistory as createHistory } from 'history';
 import Routes from './Routes';
@@ -50,7 +50,10 @@ class App extends Component {
 								<Collapse isOpen={this.state.isOpen} navbar>
 									<Nav className="ml-auto" navbar>
 										<NavItem>
-											<NavLink href="/ms">Minesweeper</NavLink>
+                                            <Link to="/ms" className={'nav-link'}>Minesweeper</Link>
+										</NavItem>
+										<NavItem>
+											<Link to="/cabinet" className={'nav-link'}>Cabinet</Link>
 										</NavItem>
 										<NavItem>
 											<NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>

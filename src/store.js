@@ -4,7 +4,8 @@ let querystring = require('querystring');
 
 
 export class AppStore {
-    @observable models = [];
+    @observable models = []
+    models = {};
     host  = 'localhost';
     port = 4001;
     schema = 'http';
@@ -18,8 +19,15 @@ export class AppStore {
 
     @action connect = async ()=>{
         let response = await fetch (this.url+'/list-models', {method: 'GET'});
-        this.models = await response.json();
-        console.log(this.models)
+        let models = await response.json();
+        for(let model of models){
+            this.models[model] = eval (`(class ${model} extends AppStore{
+			constructor (json) {
+				this.json = json;
+				console.log(json);
+			}
+		})`)
+        }
     };
 
     @action find = async (query)=>{
