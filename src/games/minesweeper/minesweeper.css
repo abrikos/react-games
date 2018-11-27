@@ -1,0 +1,73 @@
+table.board td {
+  background-color: silver;
+  padding: 5px;
+  cursor: pointer;
+  border: 3px outset #CCC;
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
+table.board td.bombs-count-0 {
+  background-color: #E8E8E8;
+}
+table.board td.bomb {
+  background-color: #E8E8E8;
+  background-image: url("/images/minesweeper/bomb.svg");
+}
+table.board td.bomb-false {
+  background-image: url("/images/minesweeper/bomb-false.svg");
+}
+table.board td.cheater {
+  background-color: yellow;
+}
+table.board td.this-mine {
+  background-color: red;
+  background-image: url("/images/minesweeper/bomb.svg");
+}
+table.board td.flag {
+  background-image: url("/images/minesweeper/flag.svg");
+}
+table.board td.bombs-count-1 {
+  background-color: #E8E8E8;
+  background-size: 15px;
+  background-image: url("/images/minesweeper/1.svg");
+}
+table.board td.bombs-count-2 {
+  background-color: #E8E8E8;
+  background-size: 15px;
+  background-image: url("/images/minesweeper/2.svg");
+}
+table.board td.bombs-count-3 {
+  background-color: #E8E8E8;
+  background-size: 15px;
+  background-image: url("/images/minesweeper/3.svg");
+}
+table.board td.bombs-count-4 {
+  background-color: #E8E8E8;
+  background-size: 15px;
+  background-image: url("/images/minesweeper/4.svg");
+}
+table.board td.bombs-count-5 {
+  background-color: #E8E8E8;
+  background-size: 15px;
+  background-image: url("/images/minesweeper/5.svg");
+}
+table.board td.bombs-count-6 {
+  background-color: #E8E8E8;
+  background-size: 15px;
+  background-image: url("/images/minesweeper/6.svg");
+}
+table.board td.bombs-count-7 {
+  background-color: #E8E8E8;
+  background-size: 15px;
+  background-image: url("/images/minesweeper/7.svg");
+}
+table.board td.bombs-count-8 {
+  background-color: #E8E8E8;
+  background-size: 15px;
+  background-image: url("/images/minesweeper/8.svg");
+}
+
+/*# sourceMappingURL=minesweeper.css.map */
