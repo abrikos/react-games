@@ -23,7 +23,6 @@ class App extends Component {
 	constructor (props) {
 		super (props);
 		this.store = props.store;
-		this.toggleNavbar = this.toggleNavbar.bind(this);
 		this.register = !!props.register || false;
 		this.history = props.history  || createHistory (this.props);
 		this.state = {
@@ -31,11 +30,6 @@ class App extends Component {
 		};
 	}
 
-	toggleNavbar() {
-		this.setState({
-			collapsed: !this.state.collapsed
-		});
-	}
 
 	render() {
 		let { rootPath, ...props } = this.props;
@@ -43,7 +37,7 @@ class App extends Component {
 			<Provider store={this.store}>
 				<Router history={this.history}>
 					<Context.Provider value={{rootPath}}>
-						<div className='container'>
+						<div className='container-fluid'>
 							<Navbar color="light" light expand="md">
 								<NavbarBrand href="/">reactstrap99</NavbarBrand>
 								<NavbarToggler onClick={this.toggle} />
@@ -78,8 +72,9 @@ class App extends Component {
 									</Nav>
 								</Collapse>
 							</Navbar>
-
+						<div className={'container'}>
 						<Routes store={this.store} {...props}/>
+						</div>
 						</div>
 					</Context.Provider>
 

@@ -1,0 +1,7 @@
+{
+  "1":{"name":"infura","api": "https://api.etherscan.io"},
+  "3":{"name":"ropsten","api": "https://ropsten.etherscan.io"},
+  "4":{"name":"rinkeby","api": "https://rinkeby.etherscan.io/api?"},
+  "42":{"name":"kovan","api": "https://kovan.etherscan.io"}
+
+}

@@ -1,56 +1,56 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import Web3 from 'web3';
+import {action, observable} from "mobx";
+import {Button} from "reactstrap";
+import Ether from './Ether';
+
+const ethers =require('ethers');
+const utils =require('ethers').utils;
 
 @inject('store') @observer
-
-
-
 class Cabinet extends React.Component {
+    @observable address = '';
+    @observable balance = 0;
+    @observable transactions = [];
+
 
     constructor (props) {
         super(props);
         this.props = props;
+        this.init()
     }
 
+    init = async ()=>{
+        this.eth = new Ether();
+        await this.eth.init();
+        setInterval(this.getBalance,1000);
+        let transactions = await this.eth.getTransactions();
+        console.log('TRANS', transactions)
+    };
+
+    getBalance = async ()=>{
+        this.balance = await this.eth.getBalance();
+
+    };
 
     componentDidMount() {
-        if (typeof window.web3 !== 'undefined') {
-            console.log(window.web3.currentProvider);
-            // Use Mist/MetaMask provider
-            var web3js = new Web3(window.web3.currentProvider);
 
-            web3.version.getNetwork((err, netId) => {
-                switch (netId) {
-                    case "1":
-                        console.log('This is mainnet')
-                        break
-                    case "2":
-                        console.log('This is the deprecated Morden test network.')
-                        break
-                    case "3":
-                        console.log('This is the ropsten test network.')
-                        break
-                    case "4":
-                        console.log('This is the Rinkeby test network.')
-                        break
-                    case "42":
-                        console.log('This is the Kovan test network.')
-                        break
-                    default:
-                        console.log('This is an unknown network.')
-                }
-            })
-        } else {
-            console.log('No web3? You should consider trying MetaMask!')
-        }
     }
+
+    sendEth= async()=>{
+        let tx = await this.eth.sendEth(this.eth.address,0.01);
+        console.log(tx)
+    };
 
     render () {
         return (
             <div className="admin-profile">
 
-
+                <Button onClick={this.sendEth} children={'Send Eth'}/>
+                <Button onClick={this.getTransactions} children={'Get Trans'}/>
+                <div>Balance {this.balance}</div>
+                {this.account}
+                {this.transactions.map(t=><div>{t}</div>)}
             </div>
         );
     }

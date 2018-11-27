@@ -5,7 +5,7 @@ import Config from './config'
 import Field from './Field';
 import { Button, ButtonGroup } from 'reactstrap';
 import './minesweeper.css'
-import store from './../../store'
+//import store from '../../model-store'
 @inject('store') @observer
 
 
@@ -36,8 +36,8 @@ class Minesweeper extends React.Component {
         this.start = 0;
         this.field = new Field(this.level);
         this.minesLeft = this.field.minesLeft();
-        let model = store.models;
-        console.log(model.minesweeper)
+        //let model = store.models;
+        //console.log(model.minesweeper)
         //setInterval(()=>{this.timer()},1000)
 	};
 
